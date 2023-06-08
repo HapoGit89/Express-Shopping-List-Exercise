@@ -1,6 +1,7 @@
 const express = require('express')
 const itemRoutes = require('./routes')
 const ExpressError = require ('./expressError')
+const items = require ('./fakeDb')
 
 const app = express();
 
