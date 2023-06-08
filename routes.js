@@ -1,97 +1,97 @@
 const express = require("express");
 const router = new express.Router();
-const items = require ('./fakeDb');
+const items = require('./fakeDb');
 const ExpressError = require("./expressError");
 router.use(express.json())
 
-router.get("/", function(req, res) {
-  return res.json(items);
+router.get("/", function (req, res) {
+    return res.json(items);
 });
 
-router.post("/", function(req,res,next){
-    try{
-        if(Object.keys(req.body).length == 0){
-            throw new ExpressError("Please enter data",400)
-            }
+router.post("/", function (req, res, next) {
+    try {
+        if (Object.keys(req.body).length == 0) {
+            throw new ExpressError("Please enter data", 400)
+        }
         items.push(req.body)
-        return res.status(200).json({"added": req.body})
+        return res.status(201).json({ "added": req.body })
     }
-    catch(e){
+    catch (e) {
         return next(e)
     }
 
 })
 
-router.get("/:name",function( req, res, next){
+router.get("/:name", function (req, res, next) {
     const names = []
-    for (let i = 0; i< items.length; i++){
+    for (let i = 0; i < items.length; i++) {
         names.push(items[i]["name"])
     }
-    try{
-        if(!names.includes(req.params.name)){
+    try {
+        if (!names.includes(req.params.name)) {
             throw new ExpressError("This item cant be found", 400)
         }
-        for (let i = 0;i < items.length; i++){
-            if (items[i]["name"]==req.params.name){
+        for (let i = 0; i < items.length; i++) {
+            if (items[i]["name"] == req.params.name) {
                 return res.json(items[i])
             }
         }
-        
+
     }
-    catch(e){
+    catch (e) {
         return next(e)
 
     }
 })
 
-router.patch("/:name", function(req, res, next){
+router.patch("/:name", function (req, res, next) {
     const names = []
-    for (let i = 0; i< items.length; i++){
+    for (let i = 0; i < items.length; i++) {
         names.push(items[i]["name"])
     }
-    try{
-        if(!names.includes(req.params.name)){
-            throw new ExpressError("This item cant be found", 400)
+    try {
+        if (!names.includes(req.params.name)) {
+            throw new ExpressError("This item cant be found", 404)
         }
-        for (let i = 0;i < items.length; i++){
-            if (items[i]["name"]==req.params.name){
-                items[i]=req.body
-                return res.json({"updated": req.body})
+        for (let i = 0; i < items.length; i++) {
+            if (items[i]["name"] == req.params.name) {
+                items[i] = req.body
+                return res.status(201).json({ "updated": req.body })
             }
         }
-        
+
     }
-    catch(e){
+    catch (e) {
         return next(e)
     }
 })
 
-router.delete("/:name", function(req, res, next){
+router.delete("/:name", function (req, res, next) {
     const names = []
-    for (let i = 0; i< items.length; i++){
+    for (let i = 0; i < items.length; i++) {
         names.push(items[i]["name"])
     }
-    try{
-        if(!names.includes(req.params.name)){
-            throw new ExpressError("This item cant be found", 400)
+    try {
+        if (!names.includes(req.params.name)) {
+            throw new ExpressError("This item cant be found", 404)
         }
-        for (let i = 0;i < items.length; i++){
-            if (items[i]["name"]==req.params.name){
-                items.splice(i,1)
-                return res.json({"message": "Deleted"})
+        for (let i = 0; i < items.length; i++) {
+            if (items[i]["name"] == req.params.name) {
+                items.splice(i, 1)
+                return res.status(201).json({ "message": "Deleted" })
             }
         }
-        
+
     }
-    catch(e){
+    catch (e) {
         return next(e)
     }
 })
 
-router.delete("/:id", function(req, res) {
-  const idx = users.findIndex(u => u.id === +req.params.id);
-  users.splice(idx, 1);
-  return res.json({ message: "Deleted" });
+router.delete("/:id", function (req, res) {
+    const idx = users.findIndex(u => u.id === +req.params.id);
+    users.splice(idx, 1);
+    return res.json({ message: "Deleted" });
 });
 
 

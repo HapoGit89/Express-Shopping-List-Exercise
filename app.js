@@ -27,9 +27,9 @@ app.use(function(req,res, next){
     return res.json(new ExpressError("Ooops there is nothing here", 404))
 })
 
-app.listen(3000, function () {
-    console.log('App on port 3000');
-})
+
+
+module.exports = app
 
 
 
