@@ -44,6 +44,50 @@ router.get("/:name",function( req, res, next){
     }
 })
 
+router.patch("/:name", function(req, res, next){
+    const names = []
+    for (let i = 0; i< items.length; i++){
+        names.push(items[i]["name"])
+    }
+    try{
+        if(!names.includes(req.params.name)){
+            throw new ExpressError("This item cant be found", 400)
+        }
+        for (let i = 0;i < items.length; i++){
+            if (items[i]["name"]==req.params.name){
+                items[i]=req.body
+                return res.json({"updated": req.body})
+            }
+        }
+        
+    }
+    catch(e){
+        return next(e)
+    }
+})
+
+router.delete("/:name", function(req, res, next){
+    const names = []
+    for (let i = 0; i< items.length; i++){
+        names.push(items[i]["name"])
+    }
+    try{
+        if(!names.includes(req.params.name)){
+            throw new ExpressError("This item cant be found", 400)
+        }
+        for (let i = 0;i < items.length; i++){
+            if (items[i]["name"]==req.params.name){
+                items.splice(i,1)
+                return res.json({"message": "Deleted"})
+            }
+        }
+        
+    }
+    catch(e){
+        return next(e)
+    }
+})
+
 router.delete("/:id", function(req, res) {
   const idx = users.findIndex(u => u.id === +req.params.id);
   users.splice(idx, 1);
